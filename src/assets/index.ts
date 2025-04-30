@@ -1,7 +1,11 @@
 import {
     landingPageHeroImg,
+    malePic,
+    femalePic,
 } from "./image"
 
 export {
-    landingPageHeroImg
+    landingPageHeroImg,
+    malePic,
+    femalePic,
 }

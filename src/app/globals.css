@@ -30,6 +30,9 @@
   --clr-grey-1: hsl(0, 0%, 80%);
   --clr-grey-2: hsl(0, 0%, 40%);
 
+  --clr-card-background: hsl(0, 0%, 92%);
+  --clr-lesson-background: hsl(312, 83%, 98%);
+
 }
 
 html[data-theme='dark'] {
@@ -50,6 +53,10 @@ html[data-theme='dark'] {
 
   --clr-grey-1: hsl(0, 0%, 30%);
   --clr-grey-2: hsl(0, 0%, 65%);
+
+  --clr-card-background: hsla(308, 60%, 25%, 0.2);
+  --clr-lesson-background: hsl(308, 60%, 8%);
+
 }
 
 

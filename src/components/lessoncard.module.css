@@ -1,0 +1,106 @@
+.card {
+    background: var(--clr-card-background);
+    color: var(--clr-text);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    backdrop-filter: blur(12px)
+  }
+  
+  .name {
+    font-size: var(--fs-500);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  
+
+.meta {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.badgeList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    background: var(--clr-primary);
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .badgeSecondary {
+    background: var(--clr-secondary);
+    color: var(--clr-grey-);
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .avatars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    border: 2px solid var(--clr-primary);
+  }
+  
+  /* Buttons */
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .callBtn,
+  .waBtn {
+    flex: 1;
+    text-decoration: none;
+    padding: 0.6rem 0;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: transform 0.2s;
+    text-align: center;
+    font-size: var(--fs-300);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .callBtn {
+    background: var(--clr-primary);
+    color: #fff;
+  }
+  .callBtn:hover {
+    background: var(--clr-primary-dark);
+    transform: translateY(-2px);
+  }
+  .waBtn {
+    background-color: #25D366;
+    color: #fff;
+  }
+  .waBtn:hover {
+    background-color: #1ebe57;
+    transform: translateY(-2px);
+  }
+  
