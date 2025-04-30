@@ -1,26 +1,193 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-scheme: light;
+
+  --fs-200: clamp(0.75rem, calc(0.73rem + 0.004vw), 0.79rem);
+  --fs-300: clamp(0.94rem, calc(0.92rem + 0.08vw), 0.98rem);
+  --fs-400: clamp(1.13rem, calc(1.06rem + 0.33vw), 1.31rem);
+  --fs-500: clamp(1.35rem, calc(1.21rem + 0.69vw), 1.75rem);
+  --fs-600: clamp(1.62rem, calc(1.37rem + 1.24vw), 2.33rem);
+  --fs-700: clamp(1.94rem, calc(1.54rem + 2.03vw), 3.11rem);
+  --fs-800: clamp(2.33rem, calc(1.7rem + 3.15vw), 4.14rem);
+  --fs-900: clamp(2.8rem, calc(1.85rem + 4.74vw), 5.52rem);
+
+  --color-scheme: light;
+
+  --clr-background: hsl(312, 83%, 98%);
+  --clr-background-dark: hsl(308, 60%, 8%);
+  
+  --clr-text: hsl(313, 25%, 15%);
+  --clr-text-dark: hsl(0, 0%, 95%);
+  
+  --clr-primary: hsl(270, 60%, 42%);
+  --clr-primary-dark: hsl(270, 60%, 28%);
+
+  --clr-secondary: hsl(330, 40%, 75%);
+  --clr-secondary-dark: hsl(330, 30%, 55%);
+
+  --clr-accent: hsl(45, 90%, 60%);
+  --clr-accent-dark: hsl(45, 90%, 45%);
+
+  --clr-grey-1: hsl(0, 0%, 80%);
+  --clr-grey-2: hsl(0, 0%, 40%);
+
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html[data-theme='dark'] {
+  --clr-background:  hsl(308, 60%, 8%);
+  --clr-background-dark: hsl(312, 83%, 98%);
+  
+  --clr-text: hsl(0, 0%, 95%);
+  --clr-text-dark: hsl(313, 25%, 15%);
+  
+  --clr-primary: hsl(270, 60%, 28%);
+  --clr-primary-dark: hsl(270, 60%, 42%);
+
+  --clr-secondary: hsl(330, 30%, 55%);
+  --clr-secondary-dark: hsl(330, 40%, 75%);
+
+  --clr-accent: hsl(45, 90%, 45%);
+  --clr-accent-dark: hsl(45, 90%, 60%);
+
+  --clr-grey-1: hsl(0, 0%, 30%);
+  --clr-grey-2: hsl(0, 0%, 65%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: var(--color-scheme);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-size: var(--fs-300);
+  line-height: 1.4;
+  background-color: var(--clr-background);
+  color: var(--clr-text);
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure {
+  margin: 0;
+}
+
+img{
+  font-size: var(--fs-300);
+  font-style: italic;
+  color: rgba(0,0,0,0);
+}
+
+.content-grid {
+  --padding-inline: 2rem;
+  --content-max-width: 56.25rem;
+  --breakout-max-width: 75rem;
+
+  --breakout-size: calc(
+    (var(--breakout-max-width) - var(--content-max-width)) / 2
+  );
+
+  display: grid;
+  grid-template-columns:
+    [full-width-start] minmax(var(--padding-inline), 1fr)
+    [breakout-start] minmax(0, var(--breakout-size))
+    [content-start] min(
+      100% - (var(--padding-inline) * 2),
+      var(--content-max-width)
+    )
+    [content-end]
+    minmax(0, var(--breakout-size)) [breakout-end]
+    minmax(var(--padding-inline), 1fr) [full-width-end];
+}
+
+.content-grid > :not(.breakout, .full-width),
+.full-width > :not(.breakout, .full-width) {
+  grid-column: content;
+}
+
+.content-grid > .breakout {
+  grid-column: breakout;
+}
+
+.content-grid > .full-width {
+  grid-column: full-width;
+
+  display: grid;
+  grid-template-columns: inherit;
+}
+
+img.full-width {
+  width: 100%;
+  max-height: 45vh;
+  object-fit: cover;
+}
+
+html {
+  color-scheme: var(--color-scheme);
+}
+
+.bg-primary {
+  background-color: var(--clr-primary-500);
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.call-to-action {
+  padding: 1rem;
+  background: hsl(0 0% 100% / 0.15);
+}
+
+.flow > * + * {
+  margin-top: var(--flow-spacing, 1em);
+}
+
+.spacing-xxs{
+  margin-bottom: 0.25rem;
+}
+
+.spacing-xs{
+  margin-bottom: 0.5rem;
+}
+
+.spacing-sm{
+  margin-bottom: 1rem;
+}
+
+.spacing-md{
+  margin-bottom: 2rem;
+}
+
+.spacing-lg{
+  margin-bottom: 4rem;
+}
+
+.spacing-xl{
+  margin-bottom: 6rem;
+}
+
+.spacing-xxl{
+  margin-bottom: 8rem;
+}
+
+
