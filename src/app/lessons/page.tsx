@@ -4,7 +4,7 @@
 import { useState, useMemo } from "react";
 
 // components
-import LessonCard, { Lesson } from "@/components/LessonCard";
+import LessonCard from "@/components/LessonCard";
 import {
     Header,
 } from "@/components"
@@ -14,8 +14,8 @@ import {
     ihsTeachers, 
     ijsTeachers, 
     craftTeachers,
+    Lesson,
 } from "@/utils";
-
 
 // css
 import styles from "./lessons.module.css";

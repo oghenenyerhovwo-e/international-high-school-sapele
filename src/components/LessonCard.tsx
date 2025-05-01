@@ -1,21 +1,15 @@
 // modules
 import { motion } from "framer-motion";
-import { StaticImageData } from "next/image";
 
 // component
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import styles from "./lessoncard.module.css";
 import Image from "next/image";
 
-export interface Lesson {
-    id: string;
-    teacherNames: string[];
-    teacherImages?: StaticImageData[]; 
-    subjects: string[];
-    classes: string[];
-    phoneNumber: string;
-    whatsappLink?: string;
-  }
+// objects and funcions
+import {
+  Lesson,
+} from "@/utils"
   
 
 interface LessonCardProps {
