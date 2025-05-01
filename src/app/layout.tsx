@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: "After-School Lessons Hub | Connect with International School Teachers for Extra Learning",
   description: "Discover a wide range of high-quality after-school lessons offered by experienced teachers at your child’s school. Easily find lessons by subject, teacher, or class, and connect directly via call or WhatsApp. Start your child’s learning journey today!",
 };
-// attribute="data-theme"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,9 +34,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        <link rel="icon" href="/logo.png" />
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>
