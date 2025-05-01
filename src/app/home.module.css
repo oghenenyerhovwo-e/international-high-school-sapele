@@ -1,17 +1,20 @@
+.home{
+  min-height: 100vh;
+  background-color: var(--clr-background);
+  color: var(--clr-text);
+}
+
+.homeHeader{
+  border-bottom: 1px solid var(--clr-grey-1);
+}
+
 .container {
-    background-color: var(--clr-background);
     color: var(--clr-text);
     padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     min-height: 100vh;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: flex-end;
-    justify-self: center;
   }
   
   .main {
@@ -22,7 +25,7 @@
   }
   
   .heroImage {
-    max-width: 100%;
+    width: min(90%, 30rem);
     height: auto;
     margin-bottom: 2rem;
   }

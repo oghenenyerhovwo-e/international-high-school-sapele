@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ThemeToggle,
+  Header,
 } from "@/components"
 
 // objects and functions
@@ -18,11 +18,11 @@ import styles from './home.module.css';
 
 const Home = () => {
   return (
-    <div className='content-grid'>
+    <div className={`${styles.home} content-grid`}>
+      <div className={`${styles.homeHeader} full-width`}>
+        <Header />
+      </div>
       <div className={`${styles.container}`}>
-        <header className={styles.header}>
-          <ThemeToggle />
-        </header>
         <motion.div
           className={styles.main}
           initial={{ opacity: 0, y: 20 }}

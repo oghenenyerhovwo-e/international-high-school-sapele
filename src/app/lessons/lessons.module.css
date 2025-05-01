@@ -1,16 +1,20 @@
-.page {
+.lessons{
+    min-height: 100vh;
+    background-color: var(--clr-background);
+    color: var(--clr-text);
+  }
+  
+.lessonsHeader{
+    border-bottom: 1px solid var(--clr-grey-1);
+}
+
+.container {
     padding: 2rem;
     background: var(--clr-lesson-background);
     color: var(--clr-text);
     display: flex;
     flex-direction: column;
     gap: 4rem;
-}
-
-.header {
-    display: flex;
-    justify-content: flex-end;
-    justify-self: center;
 }
 
 .controls {
@@ -76,4 +80,4 @@
     width: 100%;
     font-size: var(--fs-400);
 }
-  
+

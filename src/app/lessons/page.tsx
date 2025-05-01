@@ -6,7 +6,7 @@ import { useState, useMemo } from "react";
 // components
 import LessonCard, { Lesson } from "@/components/LessonCard";
 import {
-    ThemeToggle,
+    Header,
 } from "@/components"
 
 // objects and functions
@@ -59,11 +59,11 @@ export default function LessonsPage() {
   }, [search, selected]);
 
   return (
-    <div>
-        <div className={styles.page}>
-            <header className={styles.header}>
-                <ThemeToggle />
-            </header>
+    <div className={`${styles.lessons} content-grid`}>
+        <div className={`${styles.lessonsHeader} full-width`}>
+          <Header />
+        </div>
+        <div className={styles.container}>
             <div className={styles.controls}>
                 <input
                 type="search"
