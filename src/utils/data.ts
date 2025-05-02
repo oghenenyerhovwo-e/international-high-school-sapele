@@ -6,25 +6,25 @@ export interface Lesson {
     teacherNames: string[];
     teacherImages?: StaticImageData[];
     subjects: string[];
-    classes: string[]; 
+    classes: string[];
     phoneNumber: string;
-    whatsappLink?: string;    
+    whatsappLink?: string;
 }
   
 
 export const ihsTeachers: Lesson[] = [
     {
       id: "ihs-1",
-      teacherNames: ["Mr. Chinedu Okafor"],
+      teacherNames: ["Mr. XYZ"],
       teacherImages: [malePic],
       subjects: ["Mathematics", "Further Mathematics"],
-      classes: ["SS1", "SS2", "SS3"],
+      classes: ["JS1", "SS2", "SS3"],
       phoneNumber: "+2348012345678",
       whatsappLink: "https://wa.me/2348012345678",
     },
     {
       id: "ihs-2",
-      teacherNames: ["Ms. Adaeze Nwosu", "Mr. Peter Obi"],
+      teacherNames: ["Ms. ABC", "Mr. CDE"],
       teacherImages: [femalePic, malePic],
       subjects: ["English Language", "Literature"],
       classes: ["SS1", "SS2"],
@@ -37,19 +37,19 @@ export const ihsTeachers: Lesson[] = [
   export const ijsTeachers: Lesson[] = [
     {
       id: "ijs-1",
-      teacherNames: ["Mr. Tunde Bakare"],
+      teacherNames: ["Mr. JKL"],
       teacherImages: [malePic],
-      subjects: ["Basic Science", "Intro to Tech"],
-      classes: ["JS1", "JS2", "JS3"],
+      subjects: ["Basic Science", "English"],
+      classes: ["KG2", "PRY4", "PRY3"],
       phoneNumber: "+2348123456789",
       whatsappLink: "https://wa.me/2348123456789",
     },
     {
       id: "ijs-2",
-      teacherNames: ["Mrs. Grace Amadi"],
+      teacherNames: ["Mrs. FGH"],
       teacherImages: [femalePic],
-      subjects: ["Home Economics", "Agricultural Science"],
-      classes: ["JS2", "JS3"],
+      subjects: ["English", "Maths"],
+      classes: ["PR4", "PR1"],
       phoneNumber: "+2347011122233",
       whatsappLink: "https://wa.me/2347011122233",
     },
