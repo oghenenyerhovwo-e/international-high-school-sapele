@@ -7,20 +7,25 @@ import {
 } from "@/components";
 
 // objects and functions
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Poppins } from "next/font/google";
 
 // css
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// app/layout.js or _document.js
+
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // choose weights you need
+  variable: "--font-poppins",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
   subsets: ["latin"],
+  weight: ["400", "500", "700"], // choose weights you need
+  variable: "--font-roboto",
 });
+
 
 export const metadata: Metadata = {
   title: "After-School Lessons Hub | Connect with International School Teachers for Extra Learning",
@@ -38,7 +43,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo.png" />
         <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${poppins.variable} ${roboto.variable}`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>

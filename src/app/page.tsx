@@ -8,6 +8,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   Header,
+  Intro,
+  Info,
 } from "@/components"
 
 // objects and functions
@@ -19,9 +21,13 @@ import styles from './home.module.css';
 const Home = () => {
   return (
     <div className={`${styles.home} content-grid`}>
+      <Intro />
+
+      <Info />
       <div className={`${styles.homeHeader} full-width`}>
         <Header />
       </div>
+      
       <div className={`${styles.container}`}>
         <motion.div
           className={styles.main}

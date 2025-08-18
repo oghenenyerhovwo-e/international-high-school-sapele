@@ -3,6 +3,9 @@ import {
     malePic,
     femalePic,
     logoImg,
+    heroImg,
+    blobImg,
+    waveImg,
 } from "./image"
 
 export {
@@ -10,4 +13,7 @@ export {
     malePic,
     femalePic,
     logoImg,
+    heroImg,
+    blobImg,
+    waveImg,
 }
