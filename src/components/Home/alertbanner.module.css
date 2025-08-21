@@ -1,0 +1,242 @@
+/* AlertBanner.module.css */
+.alertBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  padding: 1.2rem 0;
+  font-weight: var(--fw-bold);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+  transition: min-height 0.3s ease;
+}
+
+.alertBanner.expanded {
+  min-height: 120px;
+}
+
+.alertStripes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.1) 10px,
+    rgba(255, 255, 255, 0.1) 20px
+  );
+  pointer-events: none;
+}
+
+.info {
+  background: linear-gradient(90deg, var(--clr-primary) 0%, #5e17eb 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.warning {
+  background: linear-gradient(90deg, #ff7700 0%, #ff4400 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.critical {
+  background: linear-gradient(90deg, #ff2929 0%, #c40000 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  animation: criticalPulse 2s infinite;
+}
+
+@keyframes criticalPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
+.alertContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.alertIcon {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-500);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  flex-shrink: 0;
+}
+
+.alertMessageContainer {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  min-height: 1.5em;
+}
+
+.alertMessage {
+  font-size: var(--fs-400);
+  letter-spacing: 0.5px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.expandButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: inherit;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: var(--fs-300);
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+
+.expandButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.alertControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.navButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: inherit;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: var(--fs-300);
+  backdrop-filter: blur(4px);
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+.alertCounter {
+  font-size: var(--fs-200);
+  opacity: 0.8;
+  min-width: 40px;
+  text-align: center;
+}
+
+.dismissButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: inherit;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: var(--fs-400);
+  backdrop-filter: blur(4px);
+}
+
+.dismissButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .alertBanner {
+    padding: 1rem 0;
+  }
+  
+  .alertBanner.expanded {
+    min-height: 100px;
+  }
+  
+  .alertContent {
+    gap: 1rem;
+  }
+  
+  .alertIcon {
+    font-size: var(--fs-400);
+  }
+  
+  .alertMessage {
+    font-size: var(--fs-300);
+    text-align: left;
+    justify-content: flex-start;
+  }
+  
+  .alertControls {
+    gap: 0.8rem;
+  }
+  
+  .navButton, .dismissButton, .expandButton {
+    padding: 0.4rem;
+  }
+  
+  .alertCounter {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .alertBanner {
+    padding: 0.9rem 0;
+  }
+  
+  .alertBanner.expanded {
+    min-height: 90px;
+  }
+  
+  .alertMessage {
+    font-size: var(--fs-200);
+  }
+  
+  .alertIcon {
+    font-size: var(--fs-300);
+  }
+  
+  .alertControls {
+    gap: 0.6rem;
+  }
+  
+  .navButton, .dismissButton, .expandButton {
+    padding: 0.3rem;
+    font-size: var(--fs-200);
+  }
+}

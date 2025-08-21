@@ -4,9 +4,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow: hidden;
-  padding: 4rem 0 0;
   background: linear-gradient(
     to bottom right, 
     var(--clr-primary), 
@@ -15,7 +13,162 @@
   z-index: 1;
 }
 
-/* Wave effect */
+/* Hero Section */
+.heroSection {
+  position: relative;
+  height: 60vh;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.heroSlideshow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.heroImageContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+}
+
+.heroImage:hover {
+  transform: scale(1.05);
+}
+
+.imagePlaceholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom right, 
+    var(--clr-primary), 
+    var(--clr-secondary)
+  );
+  z-index: -1;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.imageCaption {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: var(--fs-400);
+  text-align: center;
+  max-width: 80%;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 1s ease 1s forwards;
+  opacity: 0;
+  font-weight: var(--fw-medium);
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.prevButton,
+.nextButton,
+.playPauseButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.prevButton:hover,
+.nextButton:hover,
+.playPauseButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prevButton {
+  left: 2rem;
+}
+
+.nextButton {
+  right: 2rem;
+}
+
+.playPauseButton {
+  top: auto;
+  bottom: 2rem;
+  right: 2rem;
+  transform: none;
+}
+
+.slideIndicators {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  z-index: 5;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Wave effect - Positioned above slideshow but below content */
 .waveContainer {
   position: absolute;
   bottom: 0;
@@ -23,7 +176,7 @@
   width: 100%;
   height: 15%;
   overflow: hidden;
-  z-index: 0;
+  z-index: 2; /* Above slideshow but below content */
 }
 
 .wave {
@@ -73,8 +226,8 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  z-index: 1; /* Higher than wave but lower than content */
-  mix-blend-mode: screen; /* Better blending with background */
+  z-index: 1; /* Below content but above slideshow */
+  mix-blend-mode: screen;
 }
 
 .blob1 {
@@ -101,10 +254,10 @@
   left: 10%;
 }
 
-/* Content */
+/* Content - Higher z-index to be above everything */
 .contentGrid {
   position: relative;
-  z-index: 3; /* Higher than blobs */
+  z-index: 3; /* Higher than slideshow, waves, and blobs */
 }
 
 .contentWrapper {
@@ -160,12 +313,43 @@
 
 .tagline {
   font-size: var(--fs-600);
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  color: hsl(0, 0%, 80%);
+  color: hsl(0, 0%, 90%);
   opacity: 0.95;
+}
+
+.achievementBadges {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: var(--fs-300);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .ctaButton {
@@ -181,6 +365,22 @@
   border: 2px solid transparent;
   font-weight: var(--fw-bold);
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.secondaryButton {
+  font-size: var(--fs-400);
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: var(--fw-bold);
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .ctaButton:hover {
@@ -201,7 +401,7 @@
 .inspirationQuote {
   margin-top: auto;
   padding: 2rem 0;
-  z-index: 3;
+  z-index: 3; /* Same as content */
 }
 
 .quote {
@@ -230,7 +430,7 @@
   align-items: center;
   color: var(--clr-text-dark);
   font-size: var(--fs-300);
-  z-index: 10;
+  z-index: 10; /* Highest z-index */
 }
 
 .mouse {
@@ -304,5 +504,48 @@
     top: 40%;
     left: -50px;
     opacity: 0.6;
+  }
+  
+  .prevButton,
+  .nextButton {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .prevButton {
+    left: 1rem;
+  }
+  
+  .nextButton {
+    right: 1rem;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .achievementBadges {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .imageCaption {
+    font-size: var(--fs-300);
+    bottom: 8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .textContent {
+    padding: 1.5rem;
+  }
+  
+  .heading {
+    font-size: var(--fs-600);
+  }
+  
+  .imageCaption {
+    display: none;
   }
 }

@@ -1,0 +1,325 @@
+/* StudentLogin.module.css */
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--clr-background) 0%, var(--clr-background-dark) 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.backgroundAnimation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floatingShape1 {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--clr-primary) 0%, transparent 70%);
+  opacity: 0.1;
+  animation: float 15s ease-in-out infinite;
+}
+
+.floatingShape2 {
+  position: absolute;
+  bottom: 15%;
+  left: 5%;
+  width: 200px;
+  height: 200px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  background: linear-gradient(135deg, var(--clr-accent) 0%, transparent 70%);
+  opacity: 0.1;
+  animation: float 12s ease-in-out infinite reverse;
+}
+
+.floatingShape3 {
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  width: 150px;
+  height: 150px;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: linear-gradient(135deg, var(--clr-secondary) 0%, transparent 70%);
+  opacity: 0.1;
+  animation: float 18s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+}
+
+.loginContent {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+}
+
+.loginCard {
+  background: var(--clr-card-background);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logoContainer {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.logoIcon {
+  color: white;
+}
+
+.title {
+  font-size: var(--fs-600);
+  margin-bottom: 0.5rem;
+  color: var(--clr-text);
+  font-weight: var(--fw-bold);
+}
+
+.subtitle {
+  color: var(--clr-grey-2);
+  font-size: var(--fs-300);
+}
+
+.loginForm {
+  margin-bottom: 2rem;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: var(--fw-medium);
+  color: var(--clr-text);
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--clr-grey-2);
+  z-index: 1;
+}
+
+.inputField {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--clr-grey-1);
+  border-radius: 12px;
+  background: var(--clr-background);
+  color: var(--clr-text);
+  font-size: var(--fs-300);
+  transition: all 0.3s ease;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(var(--clr-primary-rgb), 0.1);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--clr-grey-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.passwordToggle:hover {
+  color: var(--clr-primary);
+}
+
+.loginButton {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: var(--fs-300);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.loginButton:hover::before {
+  left: 100%;
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.loginButton:active {
+  transform: translateY(0);
+}
+
+.loginButton.loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.supportSection {
+  text-align: center;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: var(--clr-grey-2);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--clr-grey-1);
+}
+
+.divider span {
+  padding: 0 1rem;
+  font-size: var(--fs-200);
+}
+
+.supportLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--clr-primary);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.supportLink:hover {
+  color: var(--clr-primary-dark);
+  gap: 0.75rem;
+}
+
+.helpText {
+  background: rgba(var(--clr-primary-rgb), 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--clr-primary);
+}
+
+.helpText p {
+  margin: 0;
+  font-size: var(--fs-200);
+  color: var(--clr-grey-2);
+  line-height: 1.5;
+}
+
+.loginFooter {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--clr-grey-2);
+  font-size: var(--fs-200);
+}
+
+.loginFooter p {
+  margin: 0.25rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 1rem;
+  }
+  
+  .loginCard {
+    padding: 2rem 1.5rem;
+  }
+  
+  .title {
+    font-size: var(--fs-500);
+  }
+}
+
+/* Dark mode adjustments */
+html[data-theme='dark'] .loginCard {
+  background: var(--clr-card-background);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme='dark'] .inputField {
+  background: var(--clr-background-dark);
+}

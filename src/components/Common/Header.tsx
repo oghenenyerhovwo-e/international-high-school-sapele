@@ -13,12 +13,17 @@ import {
   FaBars,
   FaTimes
 } from 'react-icons/fa';
-// objects and functions
-import { logoImg } from '@/assets';
 import Link from 'next/link';
-import styles from './header.module.css';
 import ThemeToggle from './ThemeToggle'; // Your existing component
 import Image from 'next/image';
+
+// objects and functions
+
+// assets images and files
+import { logoImg } from '@/assets';
+
+// css
+import styles from './header.module.css';
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -53,7 +58,7 @@ const Header = () => {
         // Set timeout to hide after 3 seconds
         timeoutRef.current = setTimeout(() => {
           setIsVisible(false);
-        }, 500000);
+        }, 10000);
       } 
       // Hide when scrolling down
       else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
@@ -70,7 +75,7 @@ const Header = () => {
       if (window.scrollY < 100) {
         setIsVisible(false);
       }
-    }, 500000);
+    }, 10000);
 
     window.addEventListener('scroll', handleScroll);
     
@@ -123,7 +128,7 @@ const Header = () => {
 
               {/* Right Side Controls */}
               <div className={styles.controls}>
-                <Link href="/login" className={styles.loginButton}>
+                <Link href="/students/login" className={styles.loginButton}>
                   <FaSignInAlt className={styles.loginIcon} />
                   <span>Login</span>
                 </Link>

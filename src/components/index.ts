@@ -3,7 +3,12 @@ import LessonCard from "./LessonCard"
 // Components
 import { 
     Intro,
-    Info,
+    About,
+    AcademicPrograms,
+    AlertBanner,
+    NewsEvents,
+    Testimonials,
+    Footer,
 } from './Home';
 
 import {
@@ -20,5 +25,10 @@ export {
     Header,
 
     Intro,
-    Info,
+    About,
+    AcademicPrograms,
+    AlertBanner,
+    NewsEvents,
+    Testimonials,
+    Footer,
 }

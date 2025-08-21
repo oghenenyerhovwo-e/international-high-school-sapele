@@ -1,0 +1,5 @@
+.home{
+  min-height: 100vh;
+  background-color: var(--clr-background);
+  color: var(--clr-text);
+}

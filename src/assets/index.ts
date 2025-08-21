@@ -6,6 +6,8 @@ import {
     heroImg,
     blobImg,
     waveImg,
+    schoolDayPic,
+    proprietressPic,
 } from "./image"
 
 export {
@@ -16,4 +18,6 @@ export {
     heroImg,
     blobImg,
     waveImg,
+    schoolDayPic,
+    proprietressPic,
 }
