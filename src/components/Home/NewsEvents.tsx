@@ -1,7 +1,7 @@
 "use client"
 
 // modules
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 
 // components
 import Link from 'next/link';
@@ -22,15 +22,47 @@ interface Event {
   time: string;
   location: string;
   excerpt: string;
-  image: StaticImageData; // Changed from string to StaticImageData
+  image: StaticImageData;
   category: string;
   featured?: boolean;
 }
 
+// Move static data outside the component to prevent recreation on every render
+const categories = [
+  { id: 'all', name: 'All Events' },
+  { id: 'academic', name: 'Academic' },
+  { id: 'sports', name: 'Sports' },
+  { id: 'cultural', name: 'Cultural' },
+  { id: 'clubs', name: 'Clubs' }
+];
+
+// Move animation variants outside the component
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5
+    }
+  }
+};
+
 const NewsEvents = () => {
   const [activeCategory, setActiveCategory] = useState('all');
 
-  const events: Event[] = [
+  // Memoize events data to prevent recreation on every render
+  const events = useMemo((): Event[] => [
     {
       id: '1',
       title: 'Annual Science Fair Exhibition',
@@ -93,48 +125,29 @@ const NewsEvents = () => {
       image: schoolDayPic,
       category: 'cultural'
     }
-  ];
+  ], []);
 
-  const categories = [
-    { id: 'all', name: 'All Events' },
-    { id: 'academic', name: 'Academic' },
-    { id: 'sports', name: 'Sports' },
-    { id: 'cultural', name: 'Cultural' },
-    { id: 'clubs', name: 'Clubs' }
-  ];
+  // Memoize filtered events to prevent recalculation on every render
+  const filteredEvents = useMemo(() => 
+    activeCategory === 'all' 
+      ? events 
+      : events.filter(event => event.category === activeCategory),
+    [activeCategory, events]
+  );
 
-  const filteredEvents = activeCategory === 'all' 
-    ? events 
-    : events.filter(event => event.category === activeCategory);
-
-  const formatDate = (date: Date) => {
+  // Memoize date formatting function
+  const formatDate = useCallback((date: Date) => {
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
     });
-  };
+  }, []);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
+  // Memoize category button click handler
+  const handleCategoryClick = useCallback((categoryId: string) => {
+    setActiveCategory(categoryId);
+  }, []);
 
   return (
     <section className={`${styles.newsEvents} content-grid`}>
@@ -150,7 +163,7 @@ const NewsEvents = () => {
           <button
             key={category.id}
             className={`${styles.categoryButton} ${activeCategory === category.id ? styles.active : ''}`}
-            onClick={() => setActiveCategory(category.id)}
+            onClick={() => handleCategoryClick(category.id)}
           >
             {category.name}
           </button>
@@ -175,6 +188,7 @@ const NewsEvents = () => {
                 src={event.image} 
                 alt={event.title}
                 fill
+                placeholder="blur"
               />
               <div className={styles.eventCategory}>{event.category}</div>
               {event.featured && <div className={styles.featuredBadge}>Featured</div>}
@@ -208,15 +222,6 @@ const NewsEvents = () => {
           </motion.article>
         ))}
       </motion.div>
-
-      {/* <div className={styles.ctaSection}>
-        <h3>Never Miss an Event</h3>
-        <p>Subscribe to our newsletter to receive updates about upcoming events</p>
-        <div className={styles.ctaButtons}>
-          <button className="btn btn-primary">Subscribe Now</button>
-          <Link href="/events" className="btn btn-outline">View All Events</Link>
-        </div>
-      </div> */}
     </section>
   );
 };

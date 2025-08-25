@@ -1,7 +1,7 @@
 "use client"
 
 // modules
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 // components/IntroSection.tsx
 import Image from 'next/image';
@@ -9,39 +9,10 @@ import { FaArrowRight, FaChevronLeft, FaChevronRight, FaPlay, FaPause } from 're
 import { motion, AnimatePresence } from 'framer-motion';
 
 // assets pic and files
-import { schoolDayPic } from '@/assets';
+import { heroImages } from '@/data';
 
 // css
 import styles from './intro.module.css';
-
-// Sample images - replace with your actual images
-const heroImages = [
-  {
-    src: schoolDayPic,
-    alt: "School day program",
-    caption: "Engaging school day programs for holistic development"
-  },
-  {
-    src: schoolDayPic,
-    alt: "Students in well-equipped science lab",
-    caption: "Hands-on learning in our advanced laboratories"
-  },
-  {
-    src: schoolDayPic,
-    alt: "Championship sports team",
-    caption: "2023 Regional Champions - Basketball"
-  },
-  {
-    src: schoolDayPic,
-    alt: "Graduating students celebrating",
-    caption: "95% WAEC success rate in 2023"
-  },
-  {
-    src: schoolDayPic,
-    alt: "Students in computer lab",
-    caption: "Technology-integrated learning spaces"
-  }
-];
 
 const IntroSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -49,45 +20,87 @@ const IntroSection = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Reset timeout when index changes
-  const resetTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+  // Function to scroll to the about section
+  const scrollToAbout = useCallback(() => {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
-  };
+  }, []);
   
-  // Auto-advance slideshow
-  useEffect(() => {
-    if (isPlaying) {
-      resetTimeout();
-      timeoutRef.current = setTimeout(() => {
-        setCurrentImageIndex((prevIndex) => 
-          prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 5000);
-    }
-    
-    return () => resetTimeout();
-  }, [currentImageIndex, isPlaying]);
-  
-  const nextImage = () => {
+  // Memoize functions to prevent unnecessary re-renders
+  const nextImage = useCallback(() => {
     setCurrentImageIndex((prevIndex) => 
       prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
     );
-  };
+  }, []);
   
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     setCurrentImageIndex((prevIndex) => 
       prevIndex === 0 ? heroImages.length - 1 : prevIndex - 1
     );
-  };
+  }, []);
   
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
+  const togglePlayPause = useCallback(() => {
+    setIsPlaying(prev => !prev);
+  }, []);
   
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     setCurrentImageIndex(index);
+  }, []);
+  
+  // Reset timeout when index changes
+  const resetTimeout = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  }, []);
+  
+  // Auto-advance slideshow with optimized interval handling
+  useEffect(() => {
+    if (!isPlaying) {
+      resetTimeout();
+      return;
+    }
+    
+    resetTimeout();
+    timeoutRef.current = setTimeout(() => {
+      nextImage();
+    }, 5000);
+    
+    return () => resetTimeout();
+  }, [currentImageIndex, isPlaying, resetTimeout, nextImage]);
+  
+  useEffect(() => {
+  const nextIndex = (currentImageIndex + 1) % heroImages.length;
+  
+  // Preload next image for smoother transitions
+  if (typeof window !== 'undefined') {
+    const img = new window.Image();
+    img.src = typeof heroImages[nextIndex].src === 'string' 
+      ? heroImages[nextIndex].src 
+      : heroImages[nextIndex].src.src;
+  }
+}, [currentImageIndex]);
+  
+  // Handle image load
+  const handleImageLoad = useCallback(() => {
+    setIsLoading(false);
+  }, []);
+  
+  // Animation variants for better performance
+  const imageVariants = {
+    initial: { opacity: 0, scale: 1.1 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0.9 }
+  };
+  
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
   };
   
   return (
@@ -95,13 +108,14 @@ const IntroSection = () => {
       {/* Hero Image Slideshow */}
       <div className={styles.heroSection}>
         <div className={styles.heroSlideshow}>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentImageIndex}
               className={styles.heroImageContainer}
-              initial={{ opacity: 0, scale: 1.1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              variants={imageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
               transition={{ duration: 1.2, ease: "easeInOut" }}
             >
               <Image
@@ -110,7 +124,8 @@ const IntroSection = () => {
                 fill
                 className={styles.heroImage}
                 priority={currentImageIndex === 0}
-                onLoad={() => setIsLoading(false)}
+                onLoad={handleImageLoad}
+                placeholder="blur"
               />
               <div className={styles.imageOverlay}></div>
               <div className={styles.imageCaption}>
@@ -152,19 +167,18 @@ const IntroSection = () => {
       </div>
       
       {/* Content Section */}
-      {/* Content - Adjusted z-index to be above slideshow */}
       <div className={`content-grid ${styles.contentGrid}`}>
         <div className={styles.contentWrapper}>
           <motion.div 
             className={styles.textContent}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            variants={textVariants}
+            initial="hidden"
+            animate="visible"
             transition={{ duration: 0.8 }}
           >
             <motion.h1 
               className={styles.heading}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              variants={textVariants}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
               Education Makes <span className={styles.highlight}>The Difference</span>
@@ -172,8 +186,7 @@ const IntroSection = () => {
             
             <motion.p 
               className={styles.tagline}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              variants={textVariants}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
               Empowering young minds to shape a brighter tomorrow
@@ -186,8 +199,7 @@ const IntroSection = () => {
             </motion.div>
             
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              variants={textVariants}
               transition={{ delay: 0.6, duration: 0.8 }}
               className={styles.buttonGroup}
             >
@@ -198,6 +210,7 @@ const IntroSection = () => {
                   boxShadow: "0 5px 15px rgba(0,0,0,0.2)"
                 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={scrollToAbout} // Added click handler
               >
                 Discover Our Approach <FaArrowRight className={styles.arrowIcon} />
               </motion.button>

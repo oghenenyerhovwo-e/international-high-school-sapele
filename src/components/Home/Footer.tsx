@@ -1,5 +1,6 @@
 "use client"
 // modules
+import { useMemo } from 'react';
 
 // components
 import Link from 'next/link';
@@ -10,9 +11,10 @@ import {
   FaEnvelope, 
   FaMapMarkerAlt,  
   FaFacebookF, 
-  FaTwitter, 
-  FaInstagram, 
-  FaLinkedinIn,
+  FaTiktok, 
+  // FaTwitter, 
+  // FaInstagram, 
+  // FaLinkedinIn,
   FaClock,
   FaArrowRight
 } from 'react-icons/fa';
@@ -22,27 +24,30 @@ import styles from './footer.module.css';
 
 // Import your logo and other images
 // assets images and files
-import { logoImg } from '@/assets';
+import { logoImg, ministryLogo } from '@/assets';
+import { schoolDetails } from '@/data';
+
+// Move static data outside the component to prevent recreation on every render
+const quickLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'About Us', href: '/about' },
+  { name: 'Academic Programs', href: '/academics' },
+  { name: 'Admissions', href: '/admissions' },
+  { name: 'News & Events', href: '/news' },
+  { name: 'Student Portal', href: '/students/login' },
+  { name: 'Contact Us', href: '/contact' },
+];
+
+const socialLinks = [
+  { icon: <FaFacebookF />, href: schoolDetails.facebookLink, label: 'Facebook' },
+  { icon: <FaTiktok />, href: schoolDetails.tiktokLink, label: 'Tiktok' },
+  // { icon: <FaTwitter />, href: 'https://twitter.com', label: 'Twitter' },
+  // { icon: <FaInstagram />, href: 'https://instagram.com', label: 'Instagram' },
+  // { icon: <FaLinkedinIn />, href: 'https://linkedin.com', label: 'LinkedIn' }
+];
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
-  const quickLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Academic Programs', href: '/academics' },
-    { name: 'Admissions', href: '/admissions' },
-    { name: 'News & Events', href: '/news' },
-    { name: 'Student Portal', href: '/students/login' },
-    { name: 'Contact Us', href: '/contact' },
-  ];
-
-  const socialLinks = [
-    { icon: <FaFacebookF />, href: 'https://facebook.com', label: 'Facebook' },
-    { icon: <FaTwitter />, href: 'https://twitter.com', label: 'Twitter' },
-    { icon: <FaInstagram />, href: 'https://instagram.com', label: 'Instagram' },
-    { icon: <FaLinkedinIn />, href: 'https://linkedin.com', label: 'LinkedIn' }
-  ];
+  const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
     <footer className={styles.footer}>
@@ -58,6 +63,7 @@ const Footer = () => {
                 width={180}
                 height={60}
                 className={styles.logo}
+                priority={false} // Set to false as it's not critical
               />
             </div>
             <p className={styles.schoolDescription}>
@@ -66,10 +72,11 @@ const Footer = () => {
             </p>
             <div className={styles.accreditation}>
               <Image
-                src={logoImg}
-                alt="Accreditation Badge"
+                src={ministryLogo}
+                alt="Federal Ministry of Education Logo"
                 width={80}
                 height={80}
+                priority={false} // Set to false as it's not critical
               />
               <span>Fully Accredited by Education Board</span>
             </div>
@@ -96,15 +103,15 @@ const Footer = () => {
             <div className={styles.contactInfo}>
               <div className={styles.contactItem}>
                 <FaMapMarkerAlt />
-                <span>123 Education Avenue, Knowledge City, 10001</span>
+                <span>{schoolDetails.address}</span>
               </div>
               <div className={styles.contactItem}>
                 <FaPhone />
-                <span>+1 (234) 567-8900</span>
+                <span>{schoolDetails.phone}</span>
               </div>
               <div className={styles.contactItem}>
                 <FaEnvelope />
-                <span>info@schoolname.edu</span>
+                <span>{schoolDetails.email}</span>
               </div>
               <div className={styles.contactItem}>
                 <FaClock />
@@ -130,21 +137,6 @@ const Footer = () => {
                 ))}
               </div>
             </div>
-
-            {/* Newsletter Subscription */}
-            {/* <div className={styles.newsletter}>
-              <h4 className={styles.newsletterTitle}>Stay Updated</h4>
-              <form className={styles.newsletterForm}>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className={styles.newsletterInput}
-                />
-                <button type="submit" className={styles.newsletterButton}>
-                  Subscribe
-                </button>
-              </form>
-            </div> */}
           </div>
         </div>
       </div>
@@ -155,13 +147,6 @@ const Footer = () => {
           <div className={styles.copyright}>
             <p>&copy; {currentYear} International High School. All rights reserved.</p>
           </div>
-          {/* <div className={styles.legalLinks}>
-            <Link href="/privacy">Privacy Policy</Link>
-            <span className={styles.separator}>|</span>
-            <Link href="/terms">Terms of Service</Link>
-            <span className={styles.separator}>|</span>
-            <Link href="/sitemap">Sitemap</Link>
-          </div> */}
         </div>
       </div>
 

@@ -46,13 +46,21 @@
 }
 
 .logoIcon {
-  width: 2rem;
-  height: auto;
+  width: 2.5rem;
+  height: 2.5rem;
   color: var(--clr-primary);
   background: #fff;
   padding: 0.3rem;
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoIcon > img{
+  width: auto;
+  height: 2rem;
 }
 
 .logoText {

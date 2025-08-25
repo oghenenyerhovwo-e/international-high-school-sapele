@@ -35,8 +35,8 @@ const Header = () => {
   // Navigation items
   const navItems = [
     { name: 'Home', path: '/', icon: <FaHome /> },
-    { name: 'Students', path: '/students', icon: <FaUserGraduate /> },
-    { name: 'Teachers', path: '/teachers', icon: <FaChalkboardTeacher /> },
+    { name: 'Students', path: '/students/login', icon: <FaUserGraduate /> },
+    { name: 'Teachers', path: '/teachers/login', icon: <FaChalkboardTeacher /> },
     { name: 'Curriculum', path: '/curriculum', icon: <FaBook /> },
     { name: 'Blog', path: '/blog', icon: <FaBlog /> },
   ];
@@ -63,6 +63,7 @@ const Header = () => {
       // Hide when scrolling down
       else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         setIsVisible(false);
+        setIsMobileMenuOpen(false);
       }
       
       // Track scroll position
@@ -103,11 +104,12 @@ const Header = () => {
               {/* Brand Logo/Name */}
               <Link href="/" className={styles.brand}>
                 <div className={styles.logo}>
-                  <Image
-                      src={logoImg}
-                      alt="International School Logo"
-                      className={styles.logoIcon}
-                  />
+                  <div className={styles.logoIcon}>
+                    <Image
+                        src={logoImg}
+                        alt="International School Logo"
+                    />
+                  </div>
                   <div className={styles.logoText}>IHS</div>
                 </div>
               </Link>
@@ -140,7 +142,7 @@ const Header = () => {
                 className={styles.mobileMenuButton}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+                {isMobileMenuOpen ? <span className={styles.cancelIcon}><FaTimes /></span> : <FaBars />}
               </button>
             </div>
           </motion.header>
@@ -170,7 +172,7 @@ const Header = () => {
                   </Link>
                 </li>
               ))}
-              <li className={styles.mobileNavItem}>
+              {/* <li className={styles.mobileNavItem}>
                 <Link 
                   href="/login" 
                   className={styles.mobileLoginButton}
@@ -179,7 +181,7 @@ const Header = () => {
                   <FaSignInAlt className={styles.mobileLoginIcon} />
                   Student/Teacher Login
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </motion.div>
         )}

@@ -257,7 +257,8 @@
 }
 
 .subjectsGrid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
 }
@@ -270,6 +271,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  width: 100%;
 }
 
 .category {

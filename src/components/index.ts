@@ -5,7 +5,6 @@ import {
     Intro,
     About,
     AcademicPrograms,
-    AlertBanner,
     NewsEvents,
     Testimonials,
     Footer,
@@ -15,6 +14,7 @@ import {
     ThemeProvider,
     ThemeToggle,
     Header,
+    AlertBanner,
 } from "./Common"
 
 export {
@@ -23,11 +23,11 @@ export {
     ThemeProvider,
     ThemeToggle,
     Header,
+    AlertBanner,
 
     Intro,
     About,
     AcademicPrograms,
-    AlertBanner,
     NewsEvents,
     Testimonials,
     Footer,

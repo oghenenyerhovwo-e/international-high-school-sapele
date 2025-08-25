@@ -1,7 +1,7 @@
 "use client"
 
 // modules
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 
 // components
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
@@ -39,7 +39,8 @@ const About = () => {
   const y = useTransform(scrollYProgress, [0, 1], ["-30%", "10%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
-  const features = [
+  // Memoize features to prevent unnecessary re-renders
+  const features = useMemo(() => [
     {
       icon: <FaGraduationCap />,
       title: "Academic Excellence",
@@ -49,10 +50,10 @@ const About = () => {
     },
     {
       icon: <FaFlask />,
-      title: "Science Laboratories",
+      title: "State-of-the-art laboratories",
       description: "State-of-the-art laboratories where students can explore and experiment with the latest equipment and technology.",
       image: schoolDayPic,
-      stats: "12 fully equipped labs"
+      stats: "5 fully equipped labs"
     },
     {
       icon: <FaLaptop />,
@@ -66,25 +67,26 @@ const About = () => {
       title: "Parent Engagement",
       description: "Regular opportunities for parents to interact with teachers and discuss their child's progress in a collaborative environment.",
       image: schoolDayPic,
-      stats: "4 parent-teacher events yearly"
+      stats: "3 parent-teacher events yearly"
     },
     {
       icon: <FaSmile />,
       title: "Holistic Development",
       description: "Each term features exciting events and activities that make learning enjoyable and build community spirit.",
       image: schoolDayPic,
-      stats: "20+ extracurricular clubs"
+      stats: "3+ major extracurricular activities yearly"
     },
     {
       icon: <FaChalkboardTeacher />,
       title: "Inspiring Environments",
       description: "Our campus features bright, airy classrooms and facilities designed to inspire creativity, focus, and a love for learning.",
       image: schoolDayPic,
-      stats: "15-acre campus with modern facilities"
+      stats: "15-acre school with modern facilities"
     }
-  ];
+  ], []);
 
-  const containerVariants = {
+  // Memoize animation variants
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -92,9 +94,9 @@ const About = () => {
         staggerChildren: 0.2
       }
     }
-  };
+  }), []);
 
-  const itemVariants = {
+  const itemVariants = useMemo(() => ({
     hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
@@ -104,51 +106,64 @@ const About = () => {
         ease: "easeOut"
       }
     }
-  };
+  }), []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
-    }, 5000);
-    
-    return () => clearInterval(interval);
+  // Feature change handler
+  const nextFeature = useCallback(() => {
+    setActiveFeature((prev) => (prev + 1) % features.length);
   }, [features.length]);
+
+  // Auto-rotate features with cleanup
+  useEffect(() => {
+    const interval = setInterval(nextFeature, 5000);
+    return () => clearInterval(interval);
+  }, [nextFeature]);
+
+  // Memoize particle elements
+  const particles = useMemo(() => 
+    [...Array(8)].map((_, i) => (
+      <motion.div
+        key={i}
+        className={styles.particle}
+        initial={{ y: 0, opacity: 0 }}
+        animate={{ 
+          y: [0, -80, 0],
+          opacity: [0, 0.5, 0],
+          x: Math.random() * 60 - 30
+        }}
+        transition={{ 
+          duration: 6 + Math.random() * 8,
+          repeat: Infinity,
+          delay: Math.random() * 3
+        }}
+      />
+    )), []
+  );
+
+  // Handle feature hover
+  const handleFeatureHover = useCallback((index: number) => {
+    setActiveFeature(index);
+  }, []);
 
   return (
     <section id="about" className={styles.about} ref={sectionRef}>
-      {/* Animated background elements */}
+      {/* Simplified background elements */}
       <motion.div 
         className={styles.animatedCircle}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       />
       
       <motion.div 
         className={styles.animatedCircle2}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.08 }}
-        transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
+        transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
       />
       
       <div className={styles.floatingParticles}>
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={styles.particle}
-            initial={{ y: 0, opacity: 0 }}
-            animate={{ 
-              y: [0, -100, 0],
-              opacity: [0, 0.7, 0],
-              x: Math.random() * 100 - 50
-            }}
-            transition={{ 
-              duration: 5 + Math.random() * 10,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-          />
-        ))}
+        {particles}
       </div>
 
       <div className="content-grid">
@@ -156,8 +171,8 @@ const About = () => {
           className={styles.aboutHeader}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <div className={styles.titleDecoration}></div>
           <h2>Excellence in <span className={styles.highlight}>Education</span></h2>
@@ -183,7 +198,7 @@ const About = () => {
                   key={index}
                   className={`${styles.featureItem} ${activeFeature === index ? styles.active : ''}`}
                   variants={itemVariants}
-                  onMouseEnter={() => setActiveFeature(index)}
+                  onMouseEnter={() => handleFeatureHover(index)}
                 >
                   <div className={styles.featureNumber}>0{index + 1}</div>
                   <div className={styles.featureIcon}>{feature.icon}</div>
@@ -207,6 +222,7 @@ const About = () => {
                     src={features[activeFeature].image} 
                     alt={features[activeFeature].title}
                     fill
+                    placeholder="blur"
                   />
                   <div className={styles.imageOverlay}></div>
                   <div className={styles.imageFrame}></div>
@@ -218,7 +234,7 @@ const About = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 key={activeFeature}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
                 <div className={styles.indicatorText}>Focus Area</div>
                 <div className={styles.indicatorProgress}>
@@ -240,7 +256,7 @@ const About = () => {
           ref={ref}
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
         >
           <div className={styles.waveDivider}>
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -253,21 +269,22 @@ const About = () => {
               className={styles.proprietressImage}
               initial={{ opacity: 0, x: -40, rotate: -5 }}
               whileInView={{ opacity: 1, x: 0, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: 0.4 }}
             >
               <div className={styles.imageFrame}>
                 <Image 
                   src={proprietressPic} 
                   alt="School Proprietress" 
                   fill
+                  placeholder="blur"
                 />
                 <div className={styles.frameDecoration}></div>
                 <div className={styles.imageGlow}></div>
               </div>
               
               <div className={styles.proprietressInfo}>
-                <h4>Mrs. Jane Smith</h4>
+                <h4>Mrs. Ofotokun</h4>
                 <p>Proprietress & Education Director</p>
                 <div className={styles.signatureDecoration}>
                   <FaSignature />
@@ -280,8 +297,8 @@ const About = () => {
               className={styles.proprietressMessage}
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: 0.6 }}
             >
               <div className={styles.quoteIcon}><FaQuoteLeft /></div>
               <h3>Shaping Future <span className={styles.highlight}>Leaders</span></h3>

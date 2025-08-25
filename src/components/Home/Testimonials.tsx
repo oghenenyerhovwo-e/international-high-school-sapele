@@ -1,7 +1,7 @@
 "use client"
 
 // modules
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 // components
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,12 +11,8 @@ import Image, { StaticImageData } from 'next/image';
 // css
 import styles from './testimonials.module.css';
 
-import { 
-  proprietressPic,
-} from '@/assets';
-
-// Import avatar images (you can replace these with actual images)
-
+// assets
+import { schoolTestimonials } from '@/data';
 
 interface Testimonial {
   id: number;
@@ -27,76 +23,70 @@ interface Testimonial {
   avatar: StaticImageData;
 }
 
+// Move static data outside component to prevent recreation on every render
+const testimonialsData: Testimonial[] = schoolTestimonials;
+
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: 'Sarah Johnson',
-      role: 'Parent of JS2 Student',
-      content: 'This school has been a blessing for my daughter. The teachers are dedicated, the curriculum is well-structured, and the facilities are excellent. Her confidence has grown tremendously since she started here.',
-      rating: 5,
-      avatar: proprietressPic
-    },
-    {
-      id: 2,
-      name: 'David Mensah',
-      role: 'SS3 Science Student',
-      content: 'The academic environment here challenges you to be your best. The science program is exceptional, with well-equipped labs and teachers who go the extra mile to ensure we understand complex concepts.',
-      rating: 5,
-      avatar: proprietressPic
-    },
-    {
-      id: 3,
-      name: 'Amina Okafor',
-      role: 'Parent of JS1 Student',
-      content: 'As a working parent, I appreciate the communication from teachers and administration. The school app keeps me updated on my child\'s progress and school activities. The values they instill align with our family values.',
-      rating: 4,
-      avatar: proprietressPic
-    },
-    {
-      id: 4,
-      name: 'Mr. Chinedu Okoro',
-      role: 'Mathematics Teacher',
-      content: 'Teaching here has been incredibly rewarding. The students are eager to learn, and the administration provides all the support we need to innovate in our teaching methods. It feels like a true community.',
-      rating: 5,
-      avatar: proprietressPic
-    }
-  ];
+  // Memoize testimonials to prevent recreation on every render
+  const testimonials = useMemo(() => testimonialsData, []);
 
-  // Auto-rotate testimonials
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [testimonials.length, isPaused]);
-
-  const goToNext = () => {
+  // Memoize navigation functions
+  const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
-  const goToPrev = () => {
+  const goToPrev = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
-  const goToTestimonial = (index: number) => {
+  const goToTestimonial = useCallback((index: number) => {
     setCurrentIndex(index);
-  };
+  }, []);
 
-  const renderStars = (rating: number) => {
+  // Memoize star rendering function
+  const renderStars = useCallback((rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
       <FaStar
         key={index}
         className={index < rating ? styles.starFilled : styles.starEmpty}
       />
     ));
-  };
+  }, []);
+
+  // Auto-rotate testimonials with proper cleanup
+  useEffect(() => {
+    if (isPaused) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      return;
+    }
+
+    intervalRef.current = setInterval(goToNext, 5000);
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isPaused, goToNext]);
+
+  // Animation variants for better performance
+  const testimonialVariants = useMemo(() => ({
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  }), []);
+
+  // Memoize event handlers
+  const handleMouseEnter = useCallback(() => setIsPaused(true), []);
+  const handleMouseLeave = useCallback(() => setIsPaused(false), []);
 
   return (
     <section className={`${styles.testimonials} content-grid`}>
@@ -112,16 +102,17 @@ const Testimonials = () => {
 
       <div 
         className={styles.testimonialContainer}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={testimonials[currentIndex].id}
             className={styles.testimonialCard}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            variants={testimonialVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             transition={{ duration: 0.5 }}
           >
             <div className={styles.quoteIcon}>
@@ -144,6 +135,7 @@ const Testimonials = () => {
                   width={60}
                   height={60}
                   className={styles.avatarImage}
+                  placeholder="blur"
                 />
               </div>
               <div className={styles.authorInfo}>
