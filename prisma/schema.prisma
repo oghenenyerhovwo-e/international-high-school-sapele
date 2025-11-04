@@ -1,0 +1,244 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  is_current  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  classCurriculums ClassCurriculum[]
+  teacherAssignments TeacherAssignment[]
+  results Result[]
+  overallScores OverallScore[]
+  promotionLogs PromotionLog[]
+
+  @@map("sessions")
+}
+
+model Term {
+  id      Int    @id @default(autoincrement())
+  name    String @unique
+  order   Int    @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  results Result[]
+  overallScores OverallScore[]
+  promotionLogs PromotionLog[]
+
+  @@map("terms")
+}
+
+model Class {
+  id        Int    @id @default(autoincrement())
+  level     String
+  name      String
+  full_name String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  classCurriculums ClassCurriculum[]
+  teacherAssignments TeacherAssignment[]
+  students Student[]
+  results Result[]
+  overallScores OverallScore[]
+  promotionLogsFrom PromotionLog[] @relation("PromotionFrom")
+  promotionLogsTo PromotionLog[] @relation("PromotionTo")
+
+  @@unique([level, name])
+  @@map("classes")
+}
+
+model Subject {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  code String @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  classCurriculums ClassCurriculum[]
+  teacherAssignments TeacherAssignment[]
+  results Result[]
+
+  @@map("subjects")
+}
+
+model ClassCurriculum {
+  id         Int @id @default(autoincrement())
+  class_id   Int
+  subject_id Int
+  session_id Int
+  is_core    Boolean @default(true)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  class   Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subject_id], references: [id], onDelete: Cascade)
+  session Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  studentSubjects StudentSubject[]
+
+  @@unique([class_id, subject_id, session_id])
+  @@map("class_curriculum")
+}
+
+model Student {
+  id                  Int      @id @default(autoincrement())
+  admission_number    String   @unique
+  first_name          String
+  last_name           String
+  current_class_id    Int?
+  username            String   @unique
+  password_hash       String
+  is_active           Boolean  @default(true)
+  force_password_change Boolean @default(true)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  current_class Class? @relation(fields: [current_class_id], references: [id])
+  studentSubjects StudentSubject[]
+  results Result[]
+  overallScores OverallScore[]
+  promotionLogs PromotionLog[]
+
+  @@map("students")
+}
+
+model Teacher {
+  id                    Int      @id @default(autoincrement())
+  first_name            String
+  last_name             String
+  email                 String   @unique
+  username              String   @unique
+  password_hash         String
+  is_active             Boolean  @default(true)
+  force_password_change Boolean  @default(true)
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  teacherAssignments TeacherAssignment[]
+
+  @@map("teachers")
+}
+
+model TeacherAssignment {
+  id         Int @id @default(autoincrement())
+  teacher_id Int
+  class_id   Int
+  subject_id Int
+  session_id Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  teacher Teacher @relation(fields: [teacher_id], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subject_id], references: [id], onDelete: Cascade)
+  session Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@unique([class_id, subject_id, session_id])
+  @@map("teacher_assignments")
+}
+
+model StudentSubject {
+  id                  Int @id @default(autoincrement())
+  student_id          Int
+  class_curriculum_id Int
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  // Relations
+  student          Student          @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  class_curriculum ClassCurriculum  @relation(fields: [class_curriculum_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, class_curriculum_id])
+  @@map("student_subjects")
+}
+
+model Result {
+  id               Int @id @default(autoincrement())
+  student_id       Int
+  subject_id       Int
+  term_id          Int
+  session_id       Int
+  class_id         Int
+
+  // Raw scores
+  raw_test         Int?
+  raw_classwork    Int?
+  raw_homework     Int?
+  raw_exam         Int?
+
+  // Weighted scores (calculated)
+  weighted_test    Int?
+  weighted_classwork Int?
+  weighted_exam    Int?
+
+  // Totals
+  total_score      Int?
+  subject_position Int?
+
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  subject Subject @relation(fields: [subject_id], references: [id], onDelete: Cascade)
+  term    Term    @relation(fields: [term_id], references: [id], onDelete: Cascade)
+  session Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, subject_id, term_id, session_id, class_id])
+  @@map("results")
+}
+
+model OverallScore {
+  id               Int      @id @default(autoincrement())
+  student_id       Int
+  term_id          Int
+  session_id       Int
+  class_id         Int
+  total_score      Int
+  average_score    Float
+  overall_position Int?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  // Relations
+  student Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  term    Term    @relation(fields: [term_id], references: [id], onDelete: Cascade)
+  session Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [class_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, term_id, session_id, class_id])
+  @@map("overall_scores")
+}
+
+model PromotionLog {
+  id              Int      @id @default(autoincrement())
+  student_id      Int
+  from_class_id   Int
+  to_class_id     Int
+  term_id         Int
+  session_id      Int
+  date_promoted   DateTime @default(now()) @map("date_promoted")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relations
+  student   Student @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  fromClass Class   @relation("PromotionFrom", fields: [from_class_id], references: [id], onDelete: Cascade)
+  toClass   Class   @relation("PromotionTo", fields: [to_class_id], references: [id], onDelete: Cascade)
+  term      Term    @relation(fields: [term_id], references: [id], onDelete: Cascade)
+  session   Session @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@map("promotion_logs")
+}
