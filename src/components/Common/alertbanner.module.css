@@ -14,7 +14,7 @@
 }
 
 .alertBanner.expanded {
-  min-height: 120px;
+  min-height: 7.5rem;
 }
 
 .alertStripes {
@@ -152,7 +152,7 @@
 .alertCounter {
   font-size: var(--fs-200);
   opacity: 0.8;
-  min-width: 40px;
+  min-width: 2.5rem;
   text-align: center;
 }
 
@@ -184,7 +184,7 @@
   }
   
   .alertBanner.expanded {
-    min-height: 100px;
+    min-height: 6.25rem;
   }
   
   .alertContent {
@@ -220,7 +220,7 @@
   }
   
   .alertBanner.expanded {
-    min-height: 90px;
+    min-height: 5.625rem;
   }
   
   .alertMessage {

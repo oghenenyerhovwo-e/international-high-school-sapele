@@ -55,9 +55,10 @@ const Header = () => {
           clearTimeout(timeoutRef.current);
         }
         
-        // Set timeout to hide after 3 seconds
+        // Set timeout to hide after 10 seconds
         timeoutRef.current = setTimeout(() => {
           setIsVisible(false);
+          setIsMobileMenuOpen(false);
         }, 10000);
       } 
       // Hide when scrolling down
@@ -75,6 +76,7 @@ const Header = () => {
     const initialTimeout = setTimeout(() => {
       if (window.scrollY < 100) {
         setIsVisible(false);
+        setIsMobileMenuOpen(false);
       }
     }, 10000);
 

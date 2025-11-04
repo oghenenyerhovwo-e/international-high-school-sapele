@@ -1,0 +1,41 @@
+.mapContainer {
+  margin-top: 1.5rem;
+}
+
+.mapTitle {
+  font-size: var(--fs-400);
+  margin-bottom: 0.5rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.infoWindow {
+  padding: 0.5rem;
+}
+
+.infoWindow h4 {
+  margin: 0 0 0.25rem 0;
+  color: var(--clr-primary);
+  font-size: var(--fs-300);
+}
+
+.infoWindow p {
+  margin: 0;
+  color: var(--clr-text);
+  font-size: var(--fs-200);
+}
+
+/* Leaflet map container adjustments */
+.leaflet-container {
+  background: #f8f9fa;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 6px;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}

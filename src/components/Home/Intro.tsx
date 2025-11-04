@@ -167,7 +167,7 @@ const IntroSection = () => {
       </div>
       
       {/* Content Section */}
-      <div className={`content-grid ${styles.contentGrid}`}>
+      <div className={`${styles.contentGrid}`}>
         <div className={styles.contentWrapper}>
           <motion.div 
             className={styles.textContent}

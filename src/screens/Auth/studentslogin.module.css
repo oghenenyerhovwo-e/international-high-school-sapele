@@ -2,83 +2,54 @@
 .loginContainer {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--clr-background) 0%, var(--clr-background-dark) 100%);
+  flex-direction: column;
   position: relative;
   overflow: hidden;
-  padding: 2rem;
 }
 
-.backgroundAnimation {
-  position: absolute;
+.backgroundContainer {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
-  overflow: hidden;
 }
 
-.floatingShape1 {
+.backgroundImage {
+  object-fit: cover;
+}
+
+.backgroundOverlay {
   position: absolute;
-  top: 10%;
-  right: 10%;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--clr-primary) 0%, transparent 70%);
-  opacity: 0.1;
-  animation: float 15s ease-in-out infinite;
-}
-
-.floatingShape2 {
-  position: absolute;
-  bottom: 15%;
-  left: 5%;
-  width: 200px;
-  height: 200px;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  background: linear-gradient(135deg, var(--clr-accent) 0%, transparent 70%);
-  opacity: 0.1;
-  animation: float 12s ease-in-out infinite reverse;
-}
-
-.floatingShape3 {
-  position: absolute;
-  top: 40%;
-  left: 20%;
-  width: 150px;
-  height: 150px;
-  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  background: linear-gradient(135deg, var(--clr-secondary) 0%, transparent 70%);
-  opacity: 0.1;
-  animation: float 18s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(10deg);
-  }
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(113, 46, 192, 0.85) 0%, rgba(188, 95, 177, 0.85) 100%);
 }
 
 .loginContent {
   position: relative;
   z-index: 1;
-  width: 100%;
-  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem;
+  margin-top: 80px; /* Account for header height */
 }
 
 .loginCard {
-  background: var(--clr-card-background);
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .loginHeader {
@@ -95,6 +66,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .logoIcon {
@@ -106,6 +78,10 @@
   margin-bottom: 0.5rem;
   color: var(--clr-text);
   font-weight: var(--fw-bold);
+  background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
@@ -121,17 +97,19 @@
   margin-bottom: 1.5rem;
 }
 
-.inputLabel {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: var(--fw-medium);
-  color: var(--clr-text);
-}
-
 .inputContainer {
   position: relative;
   display: flex;
   align-items: center;
+  background: var(--clr-background);
+  border-radius: 12px;
+  border: 2px solid var(--clr-grey-1);
+  transition: all 0.3s ease;
+}
+
+.inputContainerFocused {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(113, 46, 192, 0.1);
 }
 
 .inputIcon {
@@ -139,23 +117,41 @@
   left: 1rem;
   color: var(--clr-grey-2);
   z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.inputContainerFocused .inputIcon {
+  color: var(--clr-primary);
 }
 
 .inputField {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid var(--clr-grey-1);
-  border-radius: 12px;
-  background: var(--clr-background);
+  padding: 1.5rem 1rem 0.5rem 3rem;
+  border: none;
+  background: transparent;
   color: var(--clr-text);
   font-size: var(--fs-300);
   transition: all 0.3s ease;
+  outline: none;
 }
 
-.inputField:focus {
-  outline: none;
-  border-color: var(--clr-primary);
-  box-shadow: 0 0 0 3px rgba(var(--clr-primary-rgb), 0.1);
+.inputLabel {
+  position: absolute;
+  top: 50%;
+  left: 3rem;
+  transform: translateY(-50%);
+  color: var(--clr-grey-2);
+  font-size: var(--fs-300);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.inputField:focus ~ .inputLabel,
+.inputField:not(:placeholder-shown) ~ .inputLabel {
+  top: 0.5rem;
+  left: 3rem;
+  font-size: var(--fs-200);
+  color: var(--clr-primary);
 }
 
 .passwordToggle {
@@ -169,15 +165,20 @@
   align-items: center;
   justify-content: center;
   transition: color 0.3s ease;
+  padding: 0.5rem;
 }
 
 .passwordToggle:hover {
   color: var(--clr-primary);
 }
 
+.buttonContainer {
+  margin-top: 2rem;
+}
+
 .loginButton {
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   background: linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);
   color: white;
   border: none;
@@ -186,35 +187,23 @@
   font-weight: var(--fw-bold);
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.loginButton::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: 0.5s;
-}
-
-.loginButton:hover::before {
-  left: 100%;
-}
-
-.loginButton:hover {
+.loginButton:hover:not(.loginButtonLoading) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-.loginButton:active {
+.loginButton:active:not(.loginButtonLoading) {
   transform: translateY(0);
 }
 
-.loginButton.loading {
+.loginButtonLoading {
   cursor: not-allowed;
   opacity: 0.8;
 }
@@ -226,13 +215,20 @@
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
-  margin: 0 auto;
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+.buttonIcon {
+  transition: transform 0.3s ease;
+}
+
+.loginButton:hover .buttonIcon {
+  transform: translateX(4px);
 }
 
 .supportSection {
@@ -265,33 +261,21 @@
   color: var(--clr-primary);
   text-decoration: none;
   font-weight: var(--fw-medium);
-  margin-bottom: 1rem;
   transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
 
 .supportLink:hover {
   color: var(--clr-primary-dark);
+  background: rgba(113, 46, 192, 0.1);
   gap: 0.75rem;
-}
-
-.helpText {
-  background: rgba(var(--clr-primary-rgb), 0.05);
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 4px solid var(--clr-primary);
-}
-
-.helpText p {
-  margin: 0;
-  font-size: var(--fs-200);
-  color: var(--clr-grey-2);
-  line-height: 1.5;
 }
 
 .loginFooter {
   text-align: center;
   margin-top: 2rem;
-  color: var(--clr-grey-2);
+  color: rgba(255, 255, 255, 0.8);
   font-size: var(--fs-200);
 }
 
@@ -301,7 +285,7 @@
 
 /* Responsive Design */
 @media (max-width: 480px) {
-  .loginContainer {
+  .loginContent {
     padding: 1rem;
   }
   
@@ -315,11 +299,47 @@
 }
 
 /* Dark mode adjustments */
-html[data-theme='dark'] .loginCard {
-  background: var(--clr-card-background);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+@media (prefers-color-scheme: dark) {
+  .loginCard {
+    background: rgba(30, 30, 40, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .inputContainer {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .inputField {
+    color: var(--clr-text-dark);
+  }
+  
+  .inputLabel {
+    color: var(--clr-grey-2);
+  }
+  
+  .title {
+    background: linear-gradient(135deg, var(--clr-accent) 0%, var(--clr-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
-html[data-theme='dark'] .inputField {
-  background: var(--clr-background-dark);
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .loginCard,
+  .inputContainer,
+  .loginButton,
+  .supportLink {
+    transition: none;
+  }
+  
+  .spinner {
+    animation: none;
+  }
+  
+  .loginButton:hover .buttonIcon {
+    transform: none;
+  }
 }

@@ -15,6 +15,7 @@ import {
     ThemeToggle,
     Header,
     AlertBanner,
+    SchoolMap,
 } from "./Common"
 
 export {
@@ -24,6 +25,7 @@ export {
     ThemeToggle,
     Header,
     AlertBanner,
+    SchoolMap,
 
     Intro,
     About,

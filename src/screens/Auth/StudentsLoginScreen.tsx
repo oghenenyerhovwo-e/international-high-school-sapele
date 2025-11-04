@@ -2,12 +2,16 @@
 
 // modules
 import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Lock, BookOpen, User, HelpCircle, ArrowRight } from 'react-feather';
 
 // components
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, BookOpen, User, HelpCircle } from 'react-feather';
 import { Header } from '@/components';
+
+// assets
+import { schoolDayPic } from '@/assets';
 
 // css
 import styles from './studentslogin.module.css';
@@ -19,6 +23,10 @@ const StudentLogin = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState({
+    studentId: false,
+    password: false
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,6 +34,14 @@ const StudentLogin = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleFocus = (field: string) => {
+    setIsFocused(prev => ({ ...prev, [field]: true }));
+  };
+
+  const handleBlur = (field: string) => {
+    setIsFocused(prev => ({ ...prev, [field]: false }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -42,12 +58,19 @@ const StudentLogin = () => {
 
   return (
     <div className={styles.loginContainer}>
-        <Header />
-      {/* Animated background elements */}
-      <div className={styles.backgroundAnimation}>
-        <div className={styles.floatingShape1}></div>
-        <div className={styles.floatingShape2}></div>
-        <div className={styles.floatingShape3}></div>
+      <Header />
+      
+      {/* Background with optimized image */}
+      <div className={styles.backgroundContainer}>
+        <Image
+          src={schoolDayPic}
+          alt="School background"
+          fill
+          priority
+          placeholder="blur"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.backgroundOverlay}></div>
       </div>
       
       <div className={styles.loginContent}>
@@ -55,7 +78,7 @@ const StudentLogin = () => {
           className={styles.loginCard}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           {/* Header Section */}
           <div className={styles.loginHeader}>
@@ -67,8 +90,22 @@ const StudentLogin = () => {
             >
               <BookOpen size={32} className={styles.logoIcon} />
             </motion.div>
-            <h1 className={styles.title}>Student Portal</h1>
-            <p className={styles.subtitle}>Access your academic resources and information</p>
+            <motion.h1 
+              className={styles.title}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              Student Portal
+            </motion.h1>
+            <motion.p 
+              className={styles.subtitle}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              Access your academic resources and information
+            </motion.p>
           </div>
 
           {/* Login Form */}
@@ -77,12 +114,9 @@ const StudentLogin = () => {
               className={styles.inputGroup}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.5 }}
             >
-              <label htmlFor="studentId" className={styles.inputLabel}>
-                Registration / ID Number
-              </label>
-              <div className={styles.inputContainer}>
+              <div className={`${styles.inputContainer} ${isFocused.studentId ? styles.focused : ''}`}>
                 <User size={18} className={styles.inputIcon} />
                 <input
                   type="text"
@@ -90,10 +124,15 @@ const StudentLogin = () => {
                   name="studentId"
                   value={formData.studentId}
                   onChange={handleChange}
-                  placeholder="Enter your student ID"
+                  onFocus={() => handleFocus('studentId')}
+                  onBlur={() => handleBlur('studentId')}
+                  placeholder=" "
                   className={styles.inputField}
                   required
                 />
+                <label htmlFor="studentId" className={styles.inputLabel}>
+                  Registration / ID Number
+                </label>
               </div>
             </motion.div>
 
@@ -101,12 +140,9 @@ const StudentLogin = () => {
               className={styles.inputGroup}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.6 }}
             >
-              <label htmlFor="password" className={styles.inputLabel}>
-                Password
-              </label>
-              <div className={styles.inputContainer}>
+              <div className={`${styles.inputContainer} ${isFocused.password ? styles.focused : ''}`}>
                 <Lock size={18} className={styles.inputIcon} />
                 <input
                   type={showPassword ? "text" : "password"}
@@ -114,14 +150,20 @@ const StudentLogin = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Enter your password"
+                  onFocus={() => handleFocus('password')}
+                  onBlur={() => handleBlur('password')}
+                  placeholder=" "
                   className={styles.inputField}
                   required
                 />
+                <label htmlFor="password" className={styles.inputLabel}>
+                  Password
+                </label>
                 <button
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -129,9 +171,10 @@ const StudentLogin = () => {
             </motion.div>
 
             <motion.div
+              className={styles.buttonContainer}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.7 }}
             >
               <button 
                 type="submit" 
@@ -141,7 +184,10 @@ const StudentLogin = () => {
                 {isLoading ? (
                   <div className={styles.spinner}></div>
                 ) : (
-                  'Sign In to Portal'
+                  <>
+                    <span>Sign In to Portal</span>
+                    <ArrowRight size={18} className={styles.buttonIcon} />
+                  </>
                 )}
               </button>
             </motion.div>
@@ -152,7 +198,7 @@ const StudentLogin = () => {
             className={styles.supportSection}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.8 }}
           >
             <div className={styles.divider}>
               <span>Need Help?</span>
@@ -162,21 +208,17 @@ const StudentLogin = () => {
               <HelpCircle size={16} />
               <span>Contact Admin for Login Assistance</span>
             </Link>
-            
-            <div className={styles.helpText}>
-              <p>If you{"'"}re having trouble accessing your account, please contact the administration office for support.</p>
-            </div>
           </motion.div>
         </motion.div>
 
-        {/* Decorative Footer */}
+        {/* Footer */}
         <motion.div 
           className={styles.loginFooter}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 1 }}
         >
-          <p>&copy; {new Date().getFullYear()} School Name. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} International High School. All rights reserved.</p>
           <p>Secure Student Portal Access</p>
         </motion.div>
       </div>

@@ -11,13 +11,11 @@ import {
   FaEnvelope, 
   FaMapMarkerAlt,  
   FaFacebookF, 
-  FaTiktok, 
-  // FaTwitter, 
-  // FaInstagram, 
-  // FaLinkedinIn,
+  FaTiktok,
   FaClock,
   FaArrowRight
 } from 'react-icons/fa';
+import { SchoolMap } from "@/components" // Import the map component
 
 // css
 import styles from './footer.module.css';
@@ -41,16 +39,13 @@ const quickLinks = [
 const socialLinks = [
   { icon: <FaFacebookF />, href: schoolDetails.facebookLink, label: 'Facebook' },
   { icon: <FaTiktok />, href: schoolDetails.tiktokLink, label: 'Tiktok' },
-  // { icon: <FaTwitter />, href: 'https://twitter.com', label: 'Twitter' },
-  // { icon: <FaInstagram />, href: 'https://instagram.com', label: 'Instagram' },
-  // { icon: <FaLinkedinIn />, href: 'https://linkedin.com', label: 'LinkedIn' }
 ];
 
 const Footer = () => {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} full-width`}>
       {/* Main Footer Content */}
       <div className={`content-grid ${styles.footerMain}`}>
         <div className={styles.footerGrid}>
@@ -63,7 +58,7 @@ const Footer = () => {
                 width={180}
                 height={60}
                 className={styles.logo}
-                priority={false} // Set to false as it's not critical
+                priority={false}
               />
             </div>
             <p className={styles.schoolDescription}>
@@ -76,7 +71,7 @@ const Footer = () => {
                 alt="Federal Ministry of Education Logo"
                 width={80}
                 height={80}
-                priority={false} // Set to false as it's not critical
+                priority={false}
               />
               <span>Fully Accredited by Education Board</span>
             </div>
@@ -137,10 +132,15 @@ const Footer = () => {
                 ))}
               </div>
             </div>
+            
+            
           </div>
         </div>
       </div>
 
+      {/* School Map */}
+      <SchoolMap />
+      
       {/* Footer Bottom */}
       <div className={styles.footerBottom}>
         <div className={`content-grid ${styles.footerBottomContent}`}>
